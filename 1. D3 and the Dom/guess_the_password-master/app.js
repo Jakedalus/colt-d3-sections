@@ -65,6 +65,9 @@ function setGuessCount(newCount) {
 function updateGame() {
 	console.log('updateGame, event object', d3.event);
 	var e = d3.event;
+	console.log('e', e);
+	console.log('e.target', e.target);
+	console.log('e.target.classList', e.target.classList);
 	if (
 		e.target.tagName === 'LI' &&
 		!e.target.classList.contains('disabled')
