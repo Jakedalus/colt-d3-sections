@@ -49,3 +49,7 @@ button:focus {
 #remove-all-notes {
 	background-color: red;
 }
+
+#im-feeling-lucky {
+	background-color: rgb(38, 196, 122);
+}
