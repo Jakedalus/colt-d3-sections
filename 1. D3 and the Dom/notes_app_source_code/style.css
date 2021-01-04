@@ -6,7 +6,7 @@ h1 {
 	text-align: center;
 }
 
-#notes {
+.container {
 	margin: 0 auto;
 	width: 75%;
 }
@@ -16,6 +16,14 @@ h1 {
 	border: 8px solid #d4daa7;
 	border-radius: 8px;
 	padding: 10px;
+}
+
+#preview {
+	background-color: lightgreen;
+	border: 8px solid green;
+	border-radius: 8px;
+	padding: 10px;
+	display: none;
 }
 
 form {
