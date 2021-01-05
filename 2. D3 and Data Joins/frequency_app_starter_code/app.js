@@ -27,7 +27,12 @@ function countLetters(letters) {
 	return tempLettersArr;
 }
 
-d3.select('#reset').selectAll('p').remove();
+d3.select('#reset').on('click', () => {
+	d3.selectAll('.letter').remove();
+	d3.select('#phrase').text(``);
+
+	d3.select('#count').text(``);
+});
 
 d3.select('form').on('submit', () => {
 	d3.event.preventDefault();
@@ -41,22 +46,21 @@ d3.select('form').on('submit', () => {
 	const letterUpdate = d3
 		.select('#letters')
 		.selectAll('p')
-		.data(letters, d => d.letter)
-		.style('color', 'black');
+		.data(letters, d => d.letter);
+
+	letterUpdate.classed('new', false).exit().remove();
 
 	const letterEnter = letterUpdate
 		.enter()
 		.append('p')
-		.style('color', 'white');
-
-	letterUpdate.exit().remove();
+		.classed('new', true)
+		.classed('letter', true);
 
 	letterEnter
 		.merge(letterUpdate)
 		.text(d => d.letter)
 		.style('height', d => d.frequency * 20 + 'px')
-		.style('width', '20px')
-		.classed('letter', true);
+		.style('width', '20px');
 
 	d3
 		.select('#phrase')
