@@ -8,6 +8,10 @@ const input = d3.select('input');
 function countLetters(letters) {
 	const tempLettersObj = {};
 	for (let letter of letters) {
+		// console.log(
+		// 	'tempLettersObj[letter] + 1',
+		// 	tempLettersObj[letter] + 1
+		// );
 		tempLettersObj[letter] =
 			tempLettersObj[letter] + 1 || 1;
 	}
@@ -27,7 +31,7 @@ d3.select('#reset').selectAll('p').remove();
 
 d3.select('form').on('submit', () => {
 	d3.event.preventDefault();
-	letters = input.property('value').split('');
+	letters = input.property('value').split('').sort();
 
 	console.log('letters', letters);
 
@@ -53,4 +57,10 @@ d3.select('form').on('submit', () => {
 		.style('height', d => d.frequency * 20 + 'px')
 		.style('width', '20px')
 		.classed('letter', true);
+
+	d3
+		.select('#phrase')
+		.text(`Analysis of: ${input.property('value')}`);
+
+	d3.select('#count').text(`Characters: ${letters.length}`);
 });
