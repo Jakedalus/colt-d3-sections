@@ -1,24 +1,14 @@
 // preview feature
 
-function addNote(fontColor) {
-	if (fontColor) {
-		d3.event.preventDefault();
-		var input = d3.select('input');
-		d3
-			.select('#notes')
-			.append('p')
-			.classed('note', true)
-			.style('color', fontColor)
-			.text(input.property('value'));
-	} else {
-		d3.event.preventDefault();
-		var input = d3.select('input');
-		d3
-			.select('#notes')
-			.append('p')
-			.classed('note', true)
-			.text(input.property('value'));
-	}
+function addNote() {
+	d3.event.preventDefault();
+	var input = d3.select('input');
+	d3
+		.select('#notes')
+		.append('p')
+		.classed('note', true)
+		.text(input.property('value'));
+
 	input.property('value', '');
 	d3.select('#preview').style('display', 'none');
 }
@@ -61,9 +51,17 @@ function getRandomInt(max) {
 }
 
 d3.select('#im-feeling-lucky').on('click', function() {
-	const fontColor = `rgb(${getRandomInt(
-		255
-	)}, ${getRandomInt(255)}, ${getRandomInt(255)})`;
-	console.log('fontColor', fontColor);
-	addNote(fontColor);
+	// const fontColor = `rgb(${getRandomInt(
+	// 	255
+	// )}, ${getRandomInt(255)}, ${getRandomInt(255)})`;
+	// console.log('fontColor', fontColor);
+	d3
+		.select('#notes')
+		.selectAll('p')
+		.style('color', function() {
+			return `rgb(
+        ${getRandomInt(255)}, 
+        ${getRandomInt(255)}, 
+        ${getRandomInt(255)})`;
+		});
 });
