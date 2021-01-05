@@ -23,6 +23,8 @@ function countLetters(letters) {
 	return tempLettersArr;
 }
 
+d3.select('#reset').selectAll('p').remove();
+
 d3.select('form').on('submit', () => {
 	d3.event.preventDefault();
 	letters = input.property('value').split('');
@@ -32,12 +34,21 @@ d3.select('form').on('submit', () => {
 	letters = countLetters(letters);
 	console.log('letter freq', letters);
 
-	d3
+	const letterUpdate = d3
 		.select('#letters')
 		.selectAll('p')
-		.data(letters)
+		.data(letters, d => d.letter)
+		.style('color', 'black');
+
+	const letterEnter = letterUpdate
 		.enter()
 		.append('p')
+		.style('color', 'white');
+
+	letterUpdate.exit().remove();
+
+	letterEnter
+		.merge(letterUpdate)
 		.text(d => d.letter)
 		.style('height', d => d.frequency * 20 + 'px')
 		.style('width', '20px')
