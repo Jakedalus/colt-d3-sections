@@ -1,0 +1,50 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Basic SVG</title>
+  <style>
+    svg {
+      border: 1px solid black;
+      width: 800px;
+      height: 450px;
+    }
+  </style>
+</head>
+<body>
+  <svg 
+    version="1.1" 
+    baseProfile="full"
+    xmlns="http://www.w3.org/2000/svg">
+    <g stroke-width="5px" stroke="blue">
+      <line x1="100" y1="100" x2="700" y2="350" />
+      <line x1="100" y1="350" x2="700" y2="100" />
+    </g>
+  </svg>
+
+  <svg 
+    version="1.1" 
+    baseProfile="full"
+    xmlns="http://www.w3.org/2000/svg">
+    <rect x="50" y="50" width="300" height="200" 
+      fill="#ffc107" stroke="#2196f3" stroke-width="9px" />
+    <rect rx="30" ry="50" x="100" y="200" width="300" height="400" 
+      fill="#e91e63" stroke="#795548" stroke-width="9px" />
+  </svg>
+  
+  <svg 
+  version="1.1" 
+  baseProfile="full"
+  xmlns="http://www.w3.org/2000/svg">
+    <polygon fill="yellow" stroke="black" stroke-width="8px" 
+        points="400,21.5 450.5,177 614,177 481.5,273 532.5,428.5 400,
+        332.5 267.5,428.5 318.5,273 186,177 349.5, 177"
+      />
+    <circle cx="400" cy="250" r="60" fill="black"/>
+    <circle cx="400" cy="235" r="60" fill="yellow"/>
+    <circle cx="370" cy="210" r="10" fill="black"/>
+    <circle cx="430" cy="210" r="10" fill="black"/>
+  </svg>
+  
+</body>
+</html>
