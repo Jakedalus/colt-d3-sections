@@ -1,6 +1,6 @@
 var width = 500,
 	height = 500,
-	padding = 20;
+	padding = 30;
 
 // var yMax = d3.max(birthData2011, d => d.lifeExpectancy);
 // var yMin = d3.min(birthData2011, d => d.lifeExpectancy);
@@ -17,6 +17,16 @@ var xScale = d3
 	)
 	.range([ padding, width - padding ]);
 
+var xAxis = d3
+	.axisBottom(xScale)
+	.tickSize(-height + 2 * padding)
+	.tickSizeOuter(0);
+
+var yAxis = d3
+	.axisLeft(yScale)
+	.tickSize(-width + 2 * padding)
+	.tickSizeOuter(0);
+
 var colorScale = d3
 	.scaleLinear()
 	.domain(
@@ -28,6 +38,19 @@ var radiusScale = d3
 	.scaleLinear()
 	.domain(d3.extent(birthData2011, d => d.births))
 	.range([ 2, 40 ]);
+
+d3
+	.select('svg')
+	.append('g')
+	.attr('transform', `translate(0, ${height - padding})`)
+	.call(xAxis);
+
+d3
+	.select('svg')
+	.append('g')
+	.attr('transform', `translate(${padding}, 0)`)
+	.call(yAxis);
+
 d3
 	.select('svg')
 	.attr('width', width)
@@ -40,3 +63,31 @@ d3
 	.attr('cy', d => yScale(d.lifeExpectancy))
 	.attr('r', d => radiusScale(d.births))
 	.attr('fill', d => colorScale(d.population / d.area));
+
+d3
+	.select('svg')
+	.append('text')
+	.attr('x', width / 2)
+	.attr('y', height - padding)
+	.attr('dy', '1.5em')
+	.style('text-anchor', 'middle')
+	.text('Births per Capita');
+
+d3
+	.select('svg')
+	.append('text')
+	.attr('x', width / 2)
+	.attr('y', padding)
+	.attr('font-size', '1.5em')
+	.style('text-anchor', 'middle')
+	.text('Data on Births by Country in 2011');
+
+d3
+	.select('svg')
+	.append('text')
+	.attr('transform', 'rotate(-90)')
+	.attr('x', -height / 2)
+	.attr('y', padding)
+	.attr('dy', '-1.1em')
+	.style('text-anchor', 'middle')
+	.text('Life Expectancy');
