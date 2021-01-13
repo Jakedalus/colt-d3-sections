@@ -1,5 +1,5 @@
-var minYear = birthData[0].year;
-var maxYear = birthData[birthData.length - 1].year;
+var minYear = d3.min(birthData, d => d.year);
+var maxYear = d3.max(birthData, d => d.year);
 
 // console.log('minYear, maxYear', minYear, maxYear);
 
@@ -7,7 +7,15 @@ var width = 600,
 	height = 600,
 	numBars = 12,
 	barPadding = 10,
-	barWidth = width / numBars - barPadding;
+	barWidth = width / numBars - barPadding,
+	maxBirths = d3.max(birthData, d => d.births);
+
+var yScale = d3
+	.scaleLinear()
+	.domain([ 0, maxBirths ])
+	.range([ height, 0 ]);
+
+console.log('yScale', yScale);
 
 d3
 	.select('input')
@@ -24,8 +32,17 @@ d3
 	.enter()
 	.append('rect')
 	.attr('width', barWidth)
-	.attr('height', d => d.births / 2.5e6 * height)
-	.attr('y', d => height - d.births / 2.5e6 * height)
+	.attr('height', d => {
+		console.log('height', height);
+		console.log('d', d);
+		console.log('d.births', d.births);
+		console.log('yScale(d.births)', yScale(d.births));
+		console.log(
+			'height - yScale(d.births)',
+			height - yScale(d.births)
+		);
+	})
+	.attr('y', d => yScale(d.births))
 	.attr('x', (d, i) => (barWidth + barPadding) * i)
 	.attr('fill', 'purple');
 
@@ -35,6 +52,16 @@ d3.select('input').on('input', () => {
 	d3
 		.selectAll('rect')
 		.data(birthData.filter(d => d.year === year))
-		.attr('height', d => d.births / 2.5e6 * height)
-		.attr('y', d => height - d.births / 2.5e6 * height);
+		.attr('height', d => {
+			console.log('height', height);
+			console.log('d', d);
+			console.log('d.births', d.births);
+			console.log('yScale(d.births)', yScale(d.births));
+			console.log(
+				'height - yScale(d.births)',
+				height - yScale(d.births)
+			);
+			return height - yScale(d.births);
+		})
+		.attr('y', d => yScale(d.births));
 });
