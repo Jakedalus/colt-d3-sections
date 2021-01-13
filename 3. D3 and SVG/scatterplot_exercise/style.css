@@ -1,4 +1,9 @@
 svg {
-  margin: 0 auto;
-  display: block;
+	margin: 0 auto;
+	display: block;
+}
+
+circle {
+	stroke: gray;
+	stroke-width: 2px;
 }
