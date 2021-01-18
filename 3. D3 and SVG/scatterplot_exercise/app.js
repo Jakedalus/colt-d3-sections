@@ -1,15 +1,36 @@
-const width = 500;
-const height = 500;
+const width = 600;
+const height = 600;
 const padding = 70;
+
+// only show data that has all variables we're looking at
+function mustHaveKeys(obj) {
+	var keys = [
+		'subscribersPer100',
+		'adultLiteracyRate',
+		'urbanPopulationRate',
+		'extremePovertyRate'
+	];
+
+	for (let key of keys) {
+		if (obj[key] === null) return false;
+	}
+
+	return true;
+}
+
+const data = regionData.filter(mustHaveKeys);
+
+console.log('data.length', data.length);
+console.log('regionData.length', regionData.length);
 
 const yScale = d3
 	.scaleLinear()
-	.domain(d3.extent(regionData, d => d.subscribersPer100))
+	.domain(d3.extent(data, d => d.subscribersPer100))
 	.range([ height - padding, padding ]);
 
 const xScale = d3
 	.scaleLinear()
-	.domain(d3.extent(regionData, d => d.adultLiteracyRate))
+	.domain(d3.extent(data, d => d.adultLiteracyRate))
 	.range([ padding, width - padding ]);
 
 const yAxis = d3
@@ -24,12 +45,12 @@ const xAxis = d3
 
 const radiusScale = d3
 	.scaleLinear()
-	.domain(d3.extent(regionData, d => d.urbanPopulationRate))
+	.domain(d3.extent(data, d => d.urbanPopulationRate))
 	.range([ 2, 40 ]);
 
 const colorScale = d3
 	.scaleLinear()
-	.domain(d3.extent(regionData, d => d.extremePovertyRate))
+	.domain(d3.extent(data, d => d.extremePovertyRate))
 	.range([ 'blue', 'red' ]);
 
 const scatterplot = d3
@@ -49,7 +70,7 @@ scatterplot
 
 scatterplot
 	.selectAll('circle')
-	.data(regionData)
+	.data(data)
 	.enter()
 	.append('circle')
 	.attr('cx', d => xScale(d.adultLiteracyRate))

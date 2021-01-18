@@ -7,3 +7,8 @@ circle {
 	stroke: gray;
 	stroke-width: 2px;
 }
+
+.tick line {
+	stroke: #ccc;
+	stroke-dasharray: 10, 5;
+}
