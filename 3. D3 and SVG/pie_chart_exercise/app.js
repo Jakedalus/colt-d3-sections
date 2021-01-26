@@ -27,11 +27,17 @@ const months = [
 ];
 
 console.log('d3.schemeCategory20', d3.schemeCategory20);
+console.log('d3.schemeSet3', d3.schemeSet3);
 
 const colorScale = d3
 	.scaleOrdinal()
 	.domain(months)
-	.range(d3.schemeCategory20);
+	.range(d3.schemeSet3);
+
+const quarterColorScale = d3
+	.scaleOrdinal()
+	.domain([ 'first', 'second', 'third', 'fourth' ])
+	.range(d3.schemeCategory10);
 
 d3
 	.select('svg')
@@ -42,7 +48,16 @@ d3
 		'transform',
 		`translate(${width / 2}, ${height / 2})`
 	)
-	.classed('chart', true);
+	.classed('inner-chart', true);
+
+d3
+	.select('svg')
+	.append('g')
+	.attr(
+		'transform',
+		`translate(${width / 2}, ${height / 2})`
+	)
+	.classed('outer-chart', true);
 
 d3
 	.select('input')
@@ -50,32 +65,34 @@ d3
 	.property('max', maxYear)
 	.property('value', minYear)
 	.on('input', () => {
-		makePieChart(+d3.event.target.value);
+		makePieOuterChart(+d3.event.target.value);
+		makePieInnerChart(+d3.event.target.value);
 	});
 
-makePieChart(minYear);
+makePieOuterChart(minYear);
+makePieInnerChart(minYear);
 
-function makePieChart(year) {
+function makePieOuterChart(year) {
 	const yearData = birthData.filter(d => d.year === year);
 
-	const arcs = d3
+	const outerArcs = d3
 		.pie()
 		.sort((a, b) => {
 			months.indexOf(a.month) - months.indexOf(b.month);
 		})
 		.value(d => d.births)(yearData);
 
-	const path = d3
+	const outerPath = d3
 		.arc()
 		.outerRadius(width / 2 - 10)
 		.innerRadius(width / 4);
 
-	console.log('arcs, path', arcs, path);
+	console.log('outerArcs, outerPath', outerArcs, outerPath);
 
 	const update = d3
-		.select('.chart')
+		.select('.outer-chart')
 		.selectAll('.arc')
-		.data(arcs);
+		.data(outerArcs);
 
 	update.exit().remove();
 
@@ -88,5 +105,65 @@ function makePieChart(year) {
 			// console.log('d', d);
 			return colorScale(d.data.month);
 		})
-		.attr('d', path);
+		.attr('d', outerPath);
+}
+
+function makePieInnerChart(year) {
+	const yearData = birthData.filter(d => d.year === year);
+
+	const innerArcs = d3
+		.pie()
+		.sort((a, b) => {
+			months.indexOf(a.month) - months.indexOf(b.month);
+		})
+		.value(d => d.births)(yearData);
+
+	const innerPath = d3
+		.arc()
+		.outerRadius(width / 4)
+		.innerRadius(0);
+
+	console.log('innerArcs, innerPath', innerArcs, innerPath);
+
+	function findQuarter(month) {
+		switch (month) {
+			case 'January':
+			case 'February':
+			case 'March':
+				return 'first';
+
+			case 'April':
+			case 'May':
+			case 'June':
+				return 'second';
+
+			case 'July':
+			case 'August':
+			case 'September':
+				return 'third';
+
+			case 'October':
+			case 'November':
+			case 'December':
+				return 'fourth';
+		}
+	}
+
+	const update = d3
+		.select('.inner-chart')
+		.selectAll('.arc')
+		.data(innerArcs);
+
+	update.exit().remove();
+
+	update
+		.enter()
+		.append('path')
+		.classed('arc', true)
+		.merge(update)
+		.attr('fill', d => {
+			// console.log('d', d);
+			return quarterColorScale(findQuarter(d.data.month));
+		})
+		.attr('d', innerPath);
 }
