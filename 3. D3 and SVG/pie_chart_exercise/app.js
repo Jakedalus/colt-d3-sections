@@ -37,7 +37,8 @@ const colorScale = d3
 const quarterColorScale = d3
 	.scaleOrdinal()
 	.domain([ 'first', 'second', 'third', 'fourth' ])
-	.range(d3.schemeCategory10);
+	.range([ 'blue', 'green', 'red', 'orange' ]);
+// .range(d3.schemeCategory10);
 
 d3
 	.select('svg')
@@ -94,7 +95,7 @@ function makePieOuterChart(year) {
 		.selectAll('.arc')
 		.data(outerArcs);
 
-	update.exit().remove();
+	// update.exit().remove();
 
 	update
 		.enter()
@@ -114,9 +115,9 @@ function makePieInnerChart(year) {
 	const innerArcs = d3
 		.pie()
 		.sort((a, b) => {
-			months.indexOf(a.month) - months.indexOf(b.month);
+			months.indexOf(a.quarter) - months.indexOf(b.quarter);
 		})
-		.value(d => d.births)(yearData);
+		.value(d => d.births);
 
 	const innerPath = d3
 		.arc()
@@ -152,7 +153,7 @@ function makePieInnerChart(year) {
 	const update = d3
 		.select('.inner-chart')
 		.selectAll('.arc')
-		.data(innerArcs);
+		.data(innerArcs(getDataByQuarter(yearData)));
 
 	update.exit().remove();
 
@@ -163,7 +164,21 @@ function makePieInnerChart(year) {
 		.merge(update)
 		.attr('fill', d => {
 			// console.log('d', d);
-			return quarterColorScale(findQuarter(d.data.month));
+			return quarterColorScale(d.data.quarter);
 		})
 		.attr('d', innerPath);
+}
+
+function getDataByQuarter(data) {
+	const quarterTallies = [ 0, 1, 2, 3 ].map(n => ({
+		quarter : n,
+		births  : 0
+	}));
+
+	for (let d of data) {
+		const quarter = Math.floor(months.indexOf(d.month) / 3);
+		quarterTallies[quarter].births += d.births;
+	}
+
+	return quarterTallies;
 }
