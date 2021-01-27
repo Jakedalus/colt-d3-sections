@@ -53,6 +53,7 @@ d3.select('input').on('input', () => {
 	d3
 		.selectAll('rect')
 		.data(birthData.filter(d => d.year === year))
+		.transition()
 		.attr('height', d => {
 			console.log('height', height);
 			console.log('d', d);
