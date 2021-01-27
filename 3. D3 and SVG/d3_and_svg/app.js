@@ -1,7 +1,7 @@
 var minYear = d3.min(birthData, d => d.year);
 var maxYear = d3.max(birthData, d => d.year);
 
-// console.log('minYear, maxYear', minYear, maxYear);
+console.log('minYear, maxYear', minYear, maxYear);
 
 var width = 600,
 	height = 600,
@@ -41,6 +41,7 @@ d3
 			'height - yScale(d.births)',
 			height - yScale(d.births)
 		);
+		return height - yScale(d.births);
 	})
 	.attr('y', d => yScale(d.births))
 	.attr('x', (d, i) => (barWidth + barPadding) * i)
