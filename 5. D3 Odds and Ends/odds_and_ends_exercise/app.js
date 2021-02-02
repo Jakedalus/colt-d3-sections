@@ -18,9 +18,14 @@ d3
 
 		console.log('minDate, maxDate', minDate, maxDate);
 
-		const dayData = data.filter(d => d.date === maxDate);
+		const dayData = data
+			.filter(d => d.date === maxDate)
+			.sort((a, b) => a.state > b.state);
+
+		const states = dayData.map(d => d.state).sort();
 
 		console.log('dayData', dayData);
+		console.log('states', states);
 
 		const width = 800,
 			height = 600,
@@ -32,10 +37,19 @@ d3
 
 		const maxDeaths = d3.max(dayData, d => d.death);
 
+		const xScale = d3
+			.scaleBand()
+			.domain(states)
+			.range([ 0, width ]);
+
 		const yScale = d3
 			.scaleLinear()
 			.domain([ 0, maxDeaths ])
 			.range([ height, 0 ]);
+
+		console.log('xScale(AK)', xScale('AK'));
+		console.log('xScale(NY)', xScale('NY'));
+		console.log('xScale(WA)', xScale('WA'));
 
 		const chart = d3
 			.select('svg')
@@ -48,6 +62,6 @@ d3
 			.classed('bar', true)
 			.attr('width', barWidth)
 			.attr('height', d => height - yScale(d.death))
-			.attr('x', (d, i) => (barWidth + barPadding) * i)
+			.attr('x', (d, i) => xScale(d.state))
 			.attr('y', d => yScale(d.death));
 	});
