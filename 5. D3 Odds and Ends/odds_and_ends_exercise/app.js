@@ -29,7 +29,7 @@ d3
 
 		const width = 900,
 			height = 600,
-			padding = 20,
+			padding = 30,
 			barPadding = 10;
 
 		const numBars = dayData.length;
@@ -61,7 +61,12 @@ d3
 				'transform',
 				`translate(0, ${height - padding})`
 			)
-			.call(xAxis);
+			.call(xAxis)
+			.selectAll('text')
+			.style('text-anchor', 'end')
+			.attr('dx', '-.4em')
+			.attr('dy', '.20em')
+			.attr('transform', 'rotate(-55)');
 
 		console.log('xScale(AK)', xScale('AK'));
 		console.log('xScale(NY)', xScale('NY'));
