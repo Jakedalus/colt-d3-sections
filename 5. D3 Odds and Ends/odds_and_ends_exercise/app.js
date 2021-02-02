@@ -27,8 +27,9 @@ d3
 		console.log('dayData', dayData);
 		console.log('states', states);
 
-		const width = 800,
+		const width = 900,
 			height = 600,
+			padding = 20,
 			barPadding = 10;
 
 		const numBars = dayData.length;
@@ -40,28 +41,43 @@ d3
 		const xScale = d3
 			.scaleBand()
 			.domain(states)
-			.range([ 0, width ]);
+			.range([ padding, width - padding ]);
 
 		const yScale = d3
 			.scaleLinear()
 			.domain([ 0, maxDeaths ])
-			.range([ height, 0 ]);
+			.range([ height - padding, padding ]);
+
+		const xAxis = d3.axisBottom(xScale);
+
+		const chart = d3
+			.select('svg')
+			.attr('width', width)
+			.attr('height', height);
+
+		chart
+			.append('g')
+			.attr(
+				'transform',
+				`translate(0, ${height - padding})`
+			)
+			.call(xAxis);
 
 		console.log('xScale(AK)', xScale('AK'));
 		console.log('xScale(NY)', xScale('NY'));
 		console.log('xScale(WA)', xScale('WA'));
 
-		const chart = d3
-			.select('svg')
-			.attr('width', width)
-			.attr('height', height)
+		chart
 			.selectAll('.bar')
 			.data(dayData)
 			.enter()
 			.append('rect')
 			.classed('bar', true)
 			.attr('width', barWidth)
-			.attr('height', d => height - yScale(d.death))
-			.attr('x', (d, i) => xScale(d.state))
+			.attr(
+				'height',
+				d => height - yScale(d.death) - padding
+			)
+			.attr('x', (d, i) => xScale(d.state) + barPadding / 2)
 			.attr('y', d => yScale(d.death));
 	});
